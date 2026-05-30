@@ -1,0 +1,32 @@
+# Claude Code internal
+.claude/
+
+# Dependencies
+vendor/
+node_modules/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+config.local.php
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & cache
+*.log
+cache/
+tmp/
+/error_log
+
+# Uploads (binary, large — track structure not content)
+uploads/
