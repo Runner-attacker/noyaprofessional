@@ -1,0 +1,523 @@
+/* ================================================================
+   NOYA PROFESSIONAL — Typography System
+   ================================================================
+   Primary:   Playfair Display  — headings, display, quotes
+   Secondary: Inter             — body, UI, labels, buttons
+   Accent:    Cormorant Garamond — editorial moments (3rd, optional)
+
+   All tokens use --typo-* prefix so they never collide with
+   the existing --gold, --serif, --sans, etc. in styles.css.
+
+   USAGE
+   ─────
+   Option A — Link in <head> (recommended, faster):
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+   Option B — CSS @import (all-in-one, slightly slower):
+     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap');
+
+   CLASS REFERENCE
+   ───────────────
+   Display / Headings : .type-display .type-h1 – .type-h6
+   Editorial          : .type-eyebrow .type-editorial .type-quote .type-tagline
+   Body               : .type-lead .type-body .type-body-sm
+   UI                 : .type-label .type-caption .type-tag .type-price .type-nav
+   Buttons            : .type-btn
+   Modifiers          : .typo-italic .typo-bold .typo-center .typo-accent …
+   Semantic scope     : add class="typo-page" to <body> for auto h1–p styles
+   ================================================================ */
+
+
+/* ══════════════════════════════════════════════════════════════
+   1. DESIGN TOKENS
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* ── Font Families ──────────────────────────────────────── */
+  --typo-f-display:   'Playfair Display', Georgia, 'Times New Roman', serif;
+  --typo-f-body:      'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --typo-f-editorial: 'Cormorant Garamond', Georgia, serif;
+
+  /* ── Type Scale (rem, base 16px) ────────────────────────── */
+  --typo-2xs:   0.625rem;   /* 10px  — tiny labels       */
+  --typo-xs:    0.75rem;    /* 12px  — captions, legal   */
+  --typo-sm:    0.875rem;   /* 14px  — small body, UI    */
+  --typo-base:  1rem;       /* 16px  — default body      */
+  --typo-md:    1.125rem;   /* 18px  — large body        */
+  --typo-lg:    1.25rem;    /* 20px  — lead              */
+  --typo-xl:    1.5rem;     /* 24px  — h6 / subheadings  */
+  --typo-2xl:   1.875rem;   /* 30px  — h5               */
+  --typo-3xl:   2.25rem;    /* 36px  — h4               */
+  --typo-4xl:   3rem;       /* 48px  — h3               */
+  --typo-5xl:   3.75rem;    /* 60px  — h2               */
+  --typo-6xl:   4.5rem;     /* 72px  — h1               */
+  --typo-7xl:   6rem;       /* 96px  — display          */
+
+  /* ── Font Weights ───────────────────────────────────────── */
+  --typo-w-light:    300;
+  --typo-w-regular:  400;
+  --typo-w-medium:   500;
+  --typo-w-semibold: 600;
+  --typo-w-bold:     700;
+  --typo-w-black:    900;
+
+  /* ── Line Heights ───────────────────────────────────────── */
+  --typo-lh-none:    1;
+  --typo-lh-tight:   1.1;
+  --typo-lh-snug:    1.25;
+  --typo-lh-normal:  1.5;
+  --typo-lh-relaxed: 1.75;
+  --typo-lh-loose:   2;
+
+  /* ── Letter Spacing ─────────────────────────────────────── */
+  --typo-ls-tightest: -0.04em;
+  --typo-ls-tight:    -0.025em;
+  --typo-ls-snug:     -0.015em;
+  --typo-ls-normal:    0em;
+  --typo-ls-wide:      0.04em;
+  --typo-ls-wider:     0.08em;
+  --typo-ls-widest:    0.16em;
+
+  /* ── Text Colors ────────────────────────────────────────── */
+  --typo-c-ink:    #1a1208;   /* headlines, max contrast  */
+  --typo-c-dark:   #2e2416;   /* rich body copy           */
+  --typo-c-mid:    #6b5d4f;   /* secondary text           */
+  --typo-c-muted:  #9c8e82;   /* captions, placeholders   */
+  --typo-c-light:  #c4b5a8;   /* decorative / disabled    */
+  --typo-c-accent: #c9922a;   /* brand gold               */
+  --typo-c-gold2:  #8b6914;   /* deeper gold hover        */
+  --typo-c-white:  #ffffff;
+  --typo-c-cream:  #fdfcf9;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2. GLOBAL BASE  (active when <body class="typo-page">)
+   ══════════════════════════════════════════════════════════════ */
+.typo-page {
+  font-family:             var(--typo-f-body);
+  font-size:               var(--typo-base);
+  font-weight:             var(--typo-w-regular);
+  line-height:             var(--typo-lh-normal);
+  color:                   var(--typo-c-dark);
+  -webkit-font-smoothing:  antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering:          optimizeLegibility;
+}
+
+/* Semantic heading defaults inside .typo-page */
+.typo-page h1 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(2.75rem, 6vw, 4.5rem);
+  font-weight:    var(--typo-w-bold);
+  line-height:    var(--typo-lh-tight);
+  letter-spacing: var(--typo-ls-tight);
+  color:          var(--typo-c-ink);
+  margin-bottom:  0.5em;
+}
+
+.typo-page h2 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(2rem, 4.5vw, 3.5rem);
+  font-weight:    var(--typo-w-bold);
+  line-height:    var(--typo-lh-tight);
+  letter-spacing: var(--typo-ls-tight);
+  color:          var(--typo-c-ink);
+  margin-bottom:  0.5em;
+}
+
+.typo-page h3 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(1.625rem, 3.2vw, 2.5rem);
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-snug);
+  letter-spacing: var(--typo-ls-snug);
+  color:          var(--typo-c-ink);
+  margin-bottom:  0.5em;
+}
+
+.typo-page h4 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(1.375rem, 2.2vw, 2rem);
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-snug);
+  letter-spacing: -0.01em;
+  color:          var(--typo-c-ink);
+  margin-bottom:  0.5em;
+}
+
+.typo-page h5 {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-xl);
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-snug);
+  letter-spacing: var(--typo-ls-normal);
+  color:          var(--typo-c-ink);
+  margin-bottom:  0.5em;
+}
+
+.typo-page h6 {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-md);
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-normal);
+  letter-spacing: var(--typo-ls-wide);
+  color:          var(--typo-c-dark);
+  margin-bottom:  0.5em;
+}
+
+.typo-page p {
+  font-size:     var(--typo-base);
+  line-height:   var(--typo-lh-relaxed);
+  color:         var(--typo-c-dark);
+  margin-bottom: 1.25em;
+}
+.typo-page p:last-child { margin-bottom: 0; }
+
+.typo-page strong { font-weight: var(--typo-w-semibold); }
+.typo-page em     { font-style: italic; }
+
+.typo-page a {
+  color:           var(--typo-c-accent);
+  text-decoration: none;
+  font-weight:     var(--typo-w-medium);
+  transition:      color 0.2s ease;
+}
+.typo-page a:hover { color: var(--typo-c-gold2); }
+
+/* Italics inside Playfair headings — Playfair italic is gorgeous */
+.typo-page h1 em,
+.typo-page h2 em,
+.typo-page h3 em,
+.typo-page h4 em {
+  font-style: italic;
+  color:      var(--typo-c-accent);
+  font-weight:inherit;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   3. DISPLAY HEADING  —  hero-scale, largest typographic moment
+   ══════════════════════════════════════════════════════════════ */
+.type-display {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(3.5rem, 9vw, 7rem);  /* 56px → 112px */
+  font-weight:    var(--typo-w-bold);
+  line-height:    var(--typo-lh-tight);
+  letter-spacing: var(--typo-ls-tightest);
+  color:          var(--typo-c-ink);
+}
+
+.type-display em {
+  font-style:  italic;
+  font-weight: var(--typo-w-regular);
+  color:       var(--typo-c-accent);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   4. HEADINGS  H1 – H6
+   ══════════════════════════════════════════════════════════════ */
+
+/* H1 — Section hero, page titles */
+.type-h1 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(2.75rem, 6vw, 4.5rem);  /* 44px → 72px */
+  font-weight:    var(--typo-w-bold);
+  line-height:    var(--typo-lh-tight);
+  letter-spacing: var(--typo-ls-tight);
+  color:          var(--typo-c-ink);
+}
+
+/* H2 — Major section headings */
+.type-h2 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(2rem, 4.5vw, 3.5rem);   /* 32px → 56px */
+  font-weight:    var(--typo-w-bold);
+  line-height:    var(--typo-lh-tight);
+  letter-spacing: var(--typo-ls-tight);
+  color:          var(--typo-c-ink);
+}
+
+/* H3 — Sub-section titles */
+.type-h3 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(1.625rem, 3.2vw, 2.5rem); /* 26px → 40px */
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-snug);
+  letter-spacing: var(--typo-ls-snug);
+  color:          var(--typo-c-ink);
+}
+
+/* H4 — Card titles, feature names */
+.type-h4 {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(1.375rem, 2.2vw, 2rem);  /* 22px → 32px */
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-snug);
+  letter-spacing: -0.01em;
+  color:          var(--typo-c-ink);
+}
+
+/* H5 — List headings, sidebar titles — switches to sans-serif */
+.type-h5 {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-xl);               /* 24px */
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-snug);
+  letter-spacing: var(--typo-ls-normal);
+  color:          var(--typo-c-ink);
+}
+
+/* H6 — Micro headings, form labels as headings */
+.type-h6 {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-md);               /* 18px */
+  font-weight:    var(--typo-w-semibold);
+  line-height:    var(--typo-lh-normal);
+  letter-spacing: var(--typo-ls-wide);
+  color:          var(--typo-c-dark);
+}
+
+/* Elegant italic accent inside any heading — use <em> */
+.type-h1 em, .type-h2 em, .type-h3 em, .type-h4 em {
+  font-style:  italic;
+  font-weight: var(--typo-w-regular);
+  color:       var(--typo-c-accent);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   5. EDITORIAL & ACCENT
+   ══════════════════════════════════════════════════════════════ */
+
+/* Eyebrow — small uppercase label above a heading */
+.type-eyebrow {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-2xs);              /* 10px */
+  font-weight:    var(--typo-w-semibold);
+  letter-spacing: var(--typo-ls-widest);
+  text-transform: uppercase;
+  line-height:    var(--typo-lh-none);
+  color:          var(--typo-c-accent);
+}
+
+/* Editorial — large Cormorant italic for pull quotes, intros */
+.type-editorial {
+  font-family:    var(--typo-f-editorial);
+  font-size:      clamp(1.875rem, 3.5vw, 3rem); /* 30px → 48px */
+  font-style:     italic;
+  font-weight:    var(--typo-w-light);
+  line-height:    1.4;
+  letter-spacing: -0.01em;
+  color:          var(--typo-c-ink);
+}
+
+/* Quote — testimonial body text, Playfair italic */
+.type-quote {
+  font-family:    var(--typo-f-display);
+  font-size:      clamp(1.25rem, 2.5vw, 1.875rem); /* 20px → 30px */
+  font-style:     italic;
+  font-weight:    var(--typo-w-regular);
+  line-height:    1.55;
+  letter-spacing: -0.01em;
+  color:          var(--typo-c-dark);
+}
+
+/* Tagline — brand taglines, short phrases in large italic serif */
+.type-tagline {
+  font-family:    var(--typo-f-editorial);
+  font-size:      clamp(1.5rem, 3vw, 2.5rem);
+  font-style:     italic;
+  font-weight:    var(--typo-w-regular);
+  line-height:    1.3;
+  letter-spacing: 0.01em;
+  color:          var(--typo-c-mid);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   6. BODY TEXT
+   ══════════════════════════════════════════════════════════════ */
+
+/* Lead — intro paragraph, slightly larger and lighter weight */
+.type-lead {
+  font-family:  var(--typo-f-body);
+  font-size:    clamp(1rem, 1.4vw, 1.25rem);  /* 16px → 20px */
+  font-weight:  var(--typo-w-light);
+  line-height:  var(--typo-lh-relaxed);
+  color:        var(--typo-c-mid);
+}
+
+/* Body — default paragraph */
+.type-body {
+  font-family: var(--typo-f-body);
+  font-size:   var(--typo-base);              /* 16px */
+  font-weight: var(--typo-w-regular);
+  line-height: var(--typo-lh-relaxed);
+  color:       var(--typo-c-dark);
+}
+
+/* Body SM — secondary text, sidebars, footnotes */
+.type-body-sm {
+  font-family: var(--typo-f-body);
+  font-size:   var(--typo-sm);               /* 14px */
+  font-weight: var(--typo-w-regular);
+  line-height: var(--typo-lh-normal);
+  color:       var(--typo-c-dark);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   7. UI TEXT
+   ══════════════════════════════════════════════════════════════ */
+
+/* Label — small uppercase metadata, form field labels */
+.type-label {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-2xs);           /* 10px */
+  font-weight:    var(--typo-w-semibold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height:    var(--typo-lh-none);
+  color:          var(--typo-c-mid);
+}
+
+/* Caption — beneath images, product details */
+.type-caption {
+  font-family: var(--typo-f-body);
+  font-size:   var(--typo-xs);             /* 12px */
+  font-weight: var(--typo-w-regular);
+  line-height: var(--typo-lh-normal);
+  color:       var(--typo-c-muted);
+}
+
+/* Tag — pill badges, category chips */
+.type-tag {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-2xs);          /* 10px */
+  font-weight:    var(--typo-w-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height:    var(--typo-lh-none);
+}
+
+/* Price — product pricing, uses tabular numerals */
+.type-price {
+  font-family:         var(--typo-f-display);
+  font-size:           clamp(1.75rem, 3vw, 2.5rem);  /* 28px → 40px */
+  font-weight:         var(--typo-w-regular);
+  font-style:          italic;
+  line-height:         var(--typo-lh-tight);
+  letter-spacing:      var(--typo-ls-snug);
+  color:               var(--typo-c-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Nav — navigation links */
+.type-nav {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-sm);           /* 14px */
+  font-weight:    var(--typo-w-medium);
+  letter-spacing: var(--typo-ls-wide);
+  text-transform: uppercase;
+  line-height:    var(--typo-lh-none);
+  color:          var(--typo-c-dark);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   8. BUTTON TEXT
+   ══════════════════════════════════════════════════════════════ */
+.type-btn {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-sm);           /* 14px */
+  font-weight:    var(--typo-w-semibold);
+  letter-spacing: var(--typo-ls-wide);
+  line-height:    var(--typo-lh-none);
+  text-transform: none;
+}
+
+/* Large button variant */
+.type-btn-lg {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-base);        /* 16px */
+  font-weight:    var(--typo-w-semibold);
+  letter-spacing: var(--typo-ls-wide);
+  line-height:    var(--typo-lh-none);
+}
+
+/* Small button variant */
+.type-btn-sm {
+  font-family:    var(--typo-f-body);
+  font-size:      var(--typo-xs);          /* 12px */
+  font-weight:    var(--typo-w-semibold);
+  letter-spacing: var(--typo-ls-wider);
+  text-transform: uppercase;
+  line-height:    var(--typo-lh-none);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   9. UTILITY MODIFIERS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Font weight overrides ─────────────────────────── */
+.typo-light    { font-weight: var(--typo-w-light)    !important; }
+.typo-regular  { font-weight: var(--typo-w-regular)  !important; }
+.typo-medium   { font-weight: var(--typo-w-medium)   !important; }
+.typo-semibold { font-weight: var(--typo-w-semibold) !important; }
+.typo-bold     { font-weight: var(--typo-w-bold)     !important; }
+.typo-black    { font-weight: var(--typo-w-black)    !important; }
+
+/* ── Style overrides ───────────────────────────────── */
+.typo-italic  { font-style: italic !important; }
+.typo-upright { font-style: normal !important; }
+.typo-upper   { text-transform: uppercase !important; }
+.typo-lower   { text-transform: lowercase !important; }
+.typo-caps    { font-variant-caps: small-caps !important; }
+
+/* ── Alignment ─────────────────────────────────────── */
+.typo-left   { text-align: left   !important; }
+.typo-center { text-align: center !important; }
+.typo-right  { text-align: right  !important; }
+
+/* ── Color overrides ───────────────────────────────── */
+.typo-ink    { color: var(--typo-c-ink)    !important; }
+.typo-dark   { color: var(--typo-c-dark)   !important; }
+.typo-mid    { color: var(--typo-c-mid)    !important; }
+.typo-muted  { color: var(--typo-c-muted)  !important; }
+.typo-accent { color: var(--typo-c-accent) !important; }
+.typo-white  { color: var(--typo-c-white)  !important; }
+
+/* ── Letter spacing overrides ──────────────────────── */
+.typo-ls-tight   { letter-spacing: var(--typo-ls-tight)   !important; }
+.typo-ls-normal  { letter-spacing: var(--typo-ls-normal)  !important; }
+.typo-ls-wide    { letter-spacing: var(--typo-ls-wide)    !important; }
+.typo-ls-widest  { letter-spacing: var(--typo-ls-widest)  !important; }
+
+/* ── Line height overrides ─────────────────────────── */
+.typo-lh-tight    { line-height: var(--typo-lh-tight)    !important; }
+.typo-lh-normal   { line-height: var(--typo-lh-normal)   !important; }
+.typo-lh-relaxed  { line-height: var(--typo-lh-relaxed)  !important; }
+
+/* ── Max-width helpers for body copy ───────────────── */
+.typo-measure-sm  { max-width: 45ch; }  /* tight reading line */
+.typo-measure     { max-width: 65ch; }  /* optimal reading line */
+.typo-measure-lg  { max-width: 85ch; }  /* wide columns */
+
+
+/* ══════════════════════════════════════════════════════════════
+   10. RESPONSIVE ADJUSTMENTS
+       clamp() handles most cases above; these catch edge cases.
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .type-editorial { font-size: 1.625rem; }  /* prevent overflow on small phones */
+  .type-lead      { font-size: var(--typo-base); }
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

@@ -1,0 +1,488 @@
+/* ================================================================
+   ANIMATED HERO — animated-hero.css
+   Pure CSS3 · No frameworks · Mobile-first responsive
+   Prefix: ah- (animated-hero) avoids collisions with main styles
+   ================================================================ */
+
+/* ── CSS Custom Properties (scoped to component) ────────────────── */
+.ah-section {
+  --ah-bg:            #f8f7f4;
+  --ah-white:         #ffffff;
+  --ah-text:          #0f172a;
+  --ah-muted:         #64748b;
+  --ah-border:        #e2e8f0;
+  --ah-accent:        #c9922a;       /* warm gold — animated word */
+  --ah-indigo:        #4f46e5;       /* badge + ghost button */
+  --ah-indigo-light:  #eef2ff;
+  --ah-green:         #16a34a;
+  --ah-green-light:   #dcfce7;
+  --ah-amber:         #d97706;
+  --ah-amber-light:   #fef3c7;
+  --ah-shadow-sm:     0 4px 16px rgba(0, 0, 0, 0.06);
+  --ah-shadow-md:     0 12px 40px rgba(0, 0, 0, 0.10);
+  --ah-shadow-lg:     0 24px 80px rgba(0, 0, 0, 0.14);
+  --ah-font:          'Jost', 'Inter', system-ui, -apple-system, sans-serif;
+  --ah-radius:        14px;
+
+  font-family:        var(--ah-font);
+  background:         var(--ah-bg);
+  min-height:         100vh;
+  display:            flex;
+  align-items:        center;
+  padding:            96px 24px 80px;
+  position:           relative;
+  overflow:           hidden;
+}
+
+/* Subtle dot-grid background texture */
+.ah-section::before {
+  content:          '';
+  position:         absolute;
+  inset:            0;
+  background-image: radial-gradient(circle, rgba(79, 70, 229, 0.06) 1px, transparent 1px);
+  background-size:  32px 32px;
+  pointer-events:   none;
+}
+
+/* ── Layout container ────────────────────────────────────────────── */
+.ah-container {
+  max-width:   1200px;
+  margin:      0 auto;
+  width:       100%;
+  display:     grid;
+  grid-template-columns: 1fr 420px;
+  gap:         72px;
+  align-items: center;
+  position:    relative;
+  z-index:     1;
+}
+
+/* ── Eyebrow badge ───────────────────────────────────────────────── */
+.ah-badge {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           8px;
+  background:    var(--ah-indigo-light);
+  border:        1px solid rgba(79, 70, 229, 0.22);
+  color:         var(--ah-indigo);
+  font-size:     11px;
+  font-weight:   600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:       8px 18px;
+  border-radius: 100px;
+  margin-bottom: 36px;
+}
+
+.ah-badge-icon {
+  width:  13px;
+  height: 13px;
+  fill:   currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Headline ────────────────────────────────────────────────────── */
+.ah-headline { margin-bottom: 28px; }
+
+.ah-title {
+  font-size:     clamp(36px, 5.2vw, 68px);
+  font-weight:   800;
+  line-height:   1.08;
+  color:         var(--ah-text);
+  margin:        0 0 6px;
+  letter-spacing:-0.03em;
+}
+
+/* ── Animated word row ───────────────────────────────────────────── */
+.ah-word-line {
+  display:     flex;
+  align-items: baseline;
+  flex-wrap:   wrap;
+  gap:         10px 14px;
+}
+
+.ah-word-prefix {
+  font-size:   clamp(26px, 3.8vw, 50px);
+  font-weight: 300;
+  color:       var(--ah-muted);
+  white-space: nowrap;
+}
+
+/* Clips the word so exit/enter stays within line height */
+.ah-word-stage {
+  overflow:    hidden;
+  display:     inline-flex;
+  align-items: baseline;
+  /* height slightly larger than line-height to avoid clipping descenders */
+  padding-bottom: 4px;
+}
+
+.ah-word {
+  display:     inline-block;
+  font-size:   clamp(26px, 3.8vw, 50px);
+  font-weight: 800;
+  font-style:  italic;
+  color:       var(--ah-accent);
+  line-height: 1.15;
+  opacity:     1;
+  transform:   translateY(0);
+}
+
+/* ── Word keyframes ──────────────────────────────────────────────── */
+@keyframes ahWordOut {
+  0%   { transform: translateY(0);     opacity: 1; }
+  100% { transform: translateY(-115%); opacity: 0; }
+}
+
+@keyframes ahWordIn {
+  0%   { transform: translateY(115%);  opacity: 0; }
+  55%  { opacity: 1; }
+  100% { transform: translateY(0);     opacity: 1; }
+}
+
+.ah-word.word-exit  { animation: ahWordOut 0.35s cubic-bezier(0.4, 0, 1, 1) forwards; }
+.ah-word.word-enter { animation: ahWordIn  0.45s cubic-bezier(0, 0, 0.2, 1) forwards; }
+
+/* ── Description ─────────────────────────────────────────────────── */
+.ah-desc {
+  font-size:   16px;
+  font-weight: 300;
+  line-height: 1.9;
+  color:       var(--ah-muted);
+  max-width:   500px;
+  margin:      0 0 44px;
+}
+
+/* ── Button group ────────────────────────────────────────────────── */
+.ah-actions {
+  display:     flex;
+  flex-wrap:   wrap;
+  align-items: center;
+  gap:         12px;
+  margin-bottom: 48px;
+}
+
+.ah-btn {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             9px;
+  font-family:     var(--ah-font);
+  font-size:       14px;
+  font-weight:     600;
+  text-decoration: none;
+  border:          2px solid transparent;
+  border-radius:   10px;
+  padding:         13px 24px;
+  cursor:          pointer;
+  line-height:     1;
+  white-space:     nowrap;
+  transition:      color 0.2s ease,
+                   background 0.2s ease,
+                   border-color 0.2s ease,
+                   box-shadow 0.2s ease,
+                   transform 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ah-btn:focus-visible {
+  outline: 3px solid var(--ah-indigo);
+  outline-offset: 3px;
+}
+
+.ah-btn:active { transform: translateY(1px) !important; }
+
+.ah-btn-icon {
+  width:      16px;
+  height:     16px;
+  flex-shrink:0;
+  fill:       currentColor;
+}
+
+/* Primary: solid dark */
+.ah-btn--primary {
+  background:  var(--ah-text);
+  color:       var(--ah-white);
+  box-shadow:  0 4px 18px rgba(15, 23, 42, 0.22);
+}
+.ah-btn--primary:hover {
+  background:  #1e293b;
+  box-shadow:  0 8px 30px rgba(15, 23, 42, 0.30);
+  transform:   translateY(-2px);
+}
+
+/* Outline: bordered */
+.ah-btn--outline {
+  background:   var(--ah-white);
+  color:        var(--ah-text);
+  border-color: var(--ah-border);
+  box-shadow:   var(--ah-shadow-sm);
+}
+.ah-btn--outline:hover {
+  border-color: var(--ah-text);
+  box-shadow:   var(--ah-shadow-md);
+  transform:    translateY(-2px);
+}
+
+/* Ghost: text-only with arrow */
+.ah-btn--ghost {
+  background:    transparent;
+  color:         var(--ah-indigo);
+  padding-left:  0;
+  padding-right: 0;
+  letter-spacing:0.01em;
+}
+.ah-btn--ghost:hover { color: #3730a3; }
+.ah-btn--ghost:hover .ah-btn-icon { transform: translateX(5px); }
+.ah-btn--ghost .ah-btn-icon { transition: transform 0.2s ease; }
+
+/* ── Social proof strip ──────────────────────────────────────────── */
+.ah-social-proof {
+  display:     flex;
+  align-items: center;
+  gap:         14px;
+}
+
+.ah-avatars {
+  display:     flex;
+  align-items: center;
+}
+
+.ah-avatar {
+  width:        34px;
+  height:       34px;
+  border-radius:50%;
+  border:       2.5px solid var(--ah-bg);
+  margin-left: -10px;
+  flex-shrink:  0;
+  background:   var(--ah-muted);
+}
+.ah-avatar:first-child { margin-left: 0; }
+
+.ah-social-text {
+  font-size:  13px;
+  color:      var(--ah-muted);
+  line-height:1.4;
+}
+.ah-social-text strong { color: var(--ah-text); font-weight: 600; }
+
+/* ================================================================
+   VISUAL SIDE — decorative right column
+   ================================================================ */
+.ah-visual {
+  position: relative;
+  height:   500px;
+}
+
+/* Soft glowing blobs */
+.ah-blob {
+  position:      absolute;
+  border-radius: 50%;
+  filter:        blur(55px);
+}
+
+.ah-blob-1 {
+  width:      360px;
+  height:     360px;
+  top:        50%;
+  left:       50%;
+  margin-top: -180px;
+  margin-left:-180px;
+  background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+  opacity:    0.65;
+  animation:  ahBlobPulse 7s ease-in-out infinite;
+}
+
+.ah-blob-2 {
+  width:      180px;
+  height:     180px;
+  top:        12%;
+  right:      4%;
+  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+  opacity:    0.55;
+  animation:  ahBlobPulse 9s ease-in-out infinite 1s reverse;
+}
+
+.ah-blob-3 {
+  width:      140px;
+  height:     140px;
+  bottom:     10%;
+  left:       6%;
+  background: linear-gradient(135deg, #ddd6fe 0%, #8b5cf6 100%);
+  opacity:    0.45;
+  animation:  ahBlobPulse 8s ease-in-out infinite 2s;
+}
+
+@keyframes ahBlobPulse {
+  0%, 100% { transform: scale(1);    }
+  50%       { transform: scale(1.10); }
+}
+
+/* Floating stat cards */
+.ah-float-card {
+  position:   absolute;
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border:     1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  padding:    16px 20px;
+  display:    flex;
+  align-items:center;
+  gap:        14px;
+  box-shadow: var(--ah-shadow-lg);
+  z-index:    2;
+  min-width:  178px;
+}
+
+.ah-float-card-1 {
+  top:  60px;
+  left: 0;
+  animation: ahFloat 5s ease-in-out infinite;
+}
+.ah-float-card-2 {
+  bottom: 80px;
+  right:  0;
+  animation: ahFloat 5s ease-in-out infinite 2.5s;
+}
+
+@keyframes ahFloat {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-10px); }
+}
+
+.ah-card-icon {
+  width:         40px;
+  height:        40px;
+  border-radius: 10px;
+  display:       flex;
+  align-items:   center;
+  justify-content:center;
+  flex-shrink:   0;
+}
+.ah-card-icon svg {
+  width:  20px;
+  height: 20px;
+  fill:   currentColor;
+}
+
+.ah-card-icon--green { background: var(--ah-green-light); color: var(--ah-green); }
+.ah-card-icon--amber { background: var(--ah-amber-light); color: var(--ah-amber); }
+
+.ah-card-body {
+  display:        flex;
+  flex-direction: column;
+  gap:            3px;
+}
+.ah-card-value {
+  font-size:   20px;
+  font-weight: 800;
+  color:       var(--ah-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.ah-card-label {
+  font-size:     11px;
+  font-weight:   500;
+  color:         var(--ah-muted);
+  letter-spacing:0.04em;
+}
+
+/* Decorative ring behind the blobs */
+.ah-visual-ring {
+  position:      absolute;
+  top:           50%;
+  left:          50%;
+  width:         280px;
+  height:        280px;
+  margin-top:   -140px;
+  margin-left:  -140px;
+  border:        1.5px dashed rgba(99, 102, 241, 0.2);
+  border-radius: 50%;
+  animation:     ahRingSpin 30s linear infinite;
+  z-index:       1;
+}
+
+.ah-visual-ring-2 {
+  width:       360px;
+  height:      360px;
+  margin-top: -180px;
+  margin-left:-180px;
+  border-width:1px;
+  border-color:rgba(99, 102, 241, 0.10);
+  animation-duration: 45s;
+  animation-direction:reverse;
+}
+
+@keyframes ahRingSpin {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet ── switch to single column */
+@media (max-width: 1024px) {
+  .ah-container {
+    grid-template-columns: 1fr;
+    gap: 52px;
+    text-align: center;
+  }
+
+  .ah-badge,
+  .ah-social-proof { justify-content: center; }
+  .ah-content { display: flex; flex-direction: column; align-items: center; }
+  .ah-word-line { justify-content: center; }
+  .ah-desc { text-align: left; }
+
+  .ah-visual { height: 320px; order: -1; }
+  .ah-blob-1 { width: 280px; height: 280px; margin-top: -140px; margin-left: -140px; }
+  .ah-blob-2 { width: 130px; height: 130px; }
+  .ah-blob-3 { display: none; }
+  .ah-visual-ring  { width: 220px; height: 220px; margin-top: -110px; margin-left: -110px; }
+  .ah-visual-ring-2{ width: 280px; height: 280px; margin-top: -140px; margin-left: -140px; }
+  .ah-float-card-1 { top: 20px;  left: 30px;  }
+  .ah-float-card-2 { bottom: 20px; right: 30px; }
+}
+
+/* Mobile ── tight spacing, stacked buttons */
+@media (max-width: 640px) {
+  .ah-section { padding: 80px 20px 56px; }
+
+  .ah-badge { font-size: 10px; padding: 6px 14px; }
+
+  .ah-word-line { gap: 6px 10px; }
+
+  .ah-actions {
+    flex-direction: column;
+    align-items:    stretch;
+    gap:            10px;
+  }
+  .ah-btn--primary,
+  .ah-btn--outline { justify-content: center; width: 100%; }
+  .ah-btn--ghost   { justify-content: center; }
+
+  .ah-visual { height: 240px; }
+  .ah-blob-1 { width: 200px; height: 200px; margin-top: -100px; margin-left: -100px; }
+  .ah-blob-2 { width: 90px;  height: 90px; filter: blur(35px); }
+  .ah-visual-ring, .ah-visual-ring-2 { display: none; }
+
+  .ah-float-card-1,
+  .ah-float-card-2 { min-width: unset; padding: 12px 14px; }
+  .ah-float-card-1 { top: 12px; left: 8px; }
+  .ah-float-card-2 { bottom: 12px; right: 8px; }
+  .ah-card-value   { font-size: 16px; }
+  .ah-card-label   { font-size: 10px; }
+  .ah-card-icon    { width: 34px; height: 34px; border-radius: 8px; }
+  .ah-card-icon svg{ width: 16px; height: 16px; }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .ah-word.word-exit,
+  .ah-word.word-enter,
+  .ah-blob,
+  .ah-float-card,
+  .ah-visual-ring { animation: none !important; }
+}

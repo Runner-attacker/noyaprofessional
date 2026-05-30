@@ -13,6 +13,7 @@
  * Optional variables you can set BEFORE including:
  *   $page_title  — appended to the browser title
  *   $body_class  — extra class on <body> for page-specific styling
+ *   $extra_css   — array of additional stylesheet paths, e.g. [ASSETS.'/css/animated-hero.css']
  */
 
 require_once __DIR__ . '/config.php';
@@ -29,11 +30,19 @@ $bodyClass = isset($body_class) ? $body_class : '';
   <title><?= htmlspecialchars($title) ?></title>
   <meta name="description" content="<?= SITE_NAME ?> — luxury professional hair care. Advanced nanotechnology treatments, formaldehyde free. Marketed by <?= SITE_MARKETER ?>.">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Cormorant Garamond + Jost (brand) · Playfair Display + Inter (typography system) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
-  <!-- Global Stylesheet -->
+  <!-- Core stylesheets -->
   <link rel="stylesheet" href="<?= ASSETS ?>/css/styles.css">
+  <link rel="stylesheet" href="<?= ASSETS ?>/css/typography.css">
+
+  <!-- Page-specific stylesheets -->
+  <?php if (!empty($extra_css)): foreach ($extra_css as $css): ?>
+  <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
+  <?php endforeach; endif; ?>
 </head>
 <body class="<?= htmlspecialchars($bodyClass) ?>">
 

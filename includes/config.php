@@ -14,6 +14,13 @@ define('SITE_NAME',     'NOYA Professional');
 define('SITE_TAGLINE',  'Complete Hair Solution — Thinking Beyond The Box');
 define('SITE_MARKETER', 'TISHKA EXIM');
 
+/* ---- WhatsApp Floating Button ----
+ * Number: international format, digits only — no +, no spaces, no dashes.
+ * Example India +91 98765 43210 → '919876543210'
+ */
+define('WHATSAPP_NUMBER',  '919876543210');
+define('WHATSAPP_MESSAGE', 'Hello NOYA Professional! I\'d like to know more about your hair treatments and products.');
+
 /* ---- Paths (relative to web root) ---- */
 /*
  * BASE_URL: relative path used for links and assets.
